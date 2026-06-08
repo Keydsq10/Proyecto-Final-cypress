@@ -11,7 +11,7 @@ describe('Casos de prueba de APIs', () => {
         cy.postCheckOutAPI(user.userId, '', 401)
     })
 
-    it.only('API | Obtener libro existente exitosamente | Key De Sousa', () => {
+    it('API | Obtener libro existente exitosamente | Key De Sousa', () => {
         cy.getBookAPI(book.bookId, 200)
     })
 

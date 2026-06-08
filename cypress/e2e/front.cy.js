@@ -5,7 +5,7 @@ const componentNav = require('../support/page_objects/componentNav')
 
 describe('Casos de prueba de FRONT', () => {
 
-  it.only('Comprar carrito exitosamente y visualizar orden de compra', () => {
+  it('Comprar carrito exitosamente y visualizar orden de compra', () => {
 
     cy.deleteCartAPI(user.userId);
     cy.visit(url.login)
