@@ -1,7 +1,8 @@
 {
-  "bookId": 92,
-  "title": "The Last Party",
-  "author": "A. R. Torre",
-  "category": "Drama",
-  "price": 12.50
+  "bookId": 93,
+  "title": "Steve Jobs",
+  "author": "Walter Isaacson",
+  "category": "Tech",
+  "price": 20.00
+
 }
