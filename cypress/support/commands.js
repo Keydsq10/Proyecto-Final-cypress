@@ -54,7 +54,7 @@ cy.request({
 
 })
 
-
+//Caso de API | Key De Sousa
 Cypress.Commands.add('getBookAPI', (bookId, codeResponse) => {
 
     cy.request({
@@ -69,4 +69,91 @@ Cypress.Commands.add('getBookAPI', (bookId, codeResponse) => {
         expect(response.status).to.eq(codeResponse)
     })
 
+})
+
+//ciro:
+Cypress.Commands.add('postLoginAPI', (username, password, codeResponse) => {
+    cy.request({
+        method: 'POST',
+        url: `https://app.bookdbqa.online/api/Login`,
+        failOnStatusCode: false, 
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json'
+        },
+        body: {
+            "username": username,
+            "password": password
+        }
+    }).then((response) => {
+        expect(response.status).to.eq(codeResponse)
+    })
+})
+
+//CASO DE PRUEBA API | Compra exitosa con múltiples libros | VANESA GONZÁLEZ
+
+Cypress.Commands.add('postCheckOutMultipleBooksAPI', (userId, token, codeResponse) => {
+
+    cy.request({
+        method: 'POST',
+        url: `https://app.bookdbqa.online/api/CheckOut/${userId}`,
+        failOnStatusCode: false,
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            authorization: token,
+        },
+        body:
+        {
+            "orderDetails": [
+                {
+                    "book": {
+                        "bookId": 2,
+                        "title": "Harry Potter and the Chamber of Secrets",
+                        "author": "JKR",
+                        "category": "Mystery",
+                        "price": 236,
+                        "coverFileName": "9d8f4978-0ef8-42d0-873a-4eb583439237HP2.jpg"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "book": {
+                        "bookId": 3,
+                        "title": "Harry Potter and the Prisoner of Azkaban",
+                        "author": "JKR",
+                        "category": "Romance",
+                        "price": 213,
+                        "coverFileName": "c63ade52-3f90-41fa-980a-1136b6ad2128HP3.jpg"
+                    },
+                    "quantity": 1
+                }
+            ],
+            "cartTotal": 449
+        }
+
+    }).then((response) => {
+        expect(response.status).to.eq(codeResponse)
+    })
+
+})
+
+//CASO DE PRUEBA | VANESA GONZALEZ
+Cypress.Commands.add('postCheckOutWithoutBodyAPI', (userId, token, codeResponse) => {
+
+    cy.request({
+        method: 'POST',
+        url: `https://app.bookdbqa.online/api/CheckOut/${userId}`,
+        failOnStatusCode: false,
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            authorization: token,
+        }
+
+    }).then((response) => {
+        expect(response.status).to.eq(codeResponse)
+    })
+
+    
 })

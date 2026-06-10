@@ -1,11 +1,13 @@
 import user from '../fixtures/user.json'
 import url from '../fixtures/url.json'
+const pageLogin = require('../support/page_objects/pageLogin')
 const pageHome = require('../support/page_objects/pageHome')
 const componentNav = require('../support/page_objects/componentNav')
 
+
 describe('Casos de prueba de FRONT', () => {
 
-  it.only('Comprar carrito exitosamente y visualizar orden de compra', () => {
+  it('Comprar carrito exitosamente y visualizar orden de compra', () => {
 
     cy.deleteCartAPI(user.userId);
     cy.visit(url.login)
@@ -28,25 +30,39 @@ describe('Casos de prueba de FRONT', () => {
 
   })
 
-  it('Filtrar libros por categoría Drama | Key De Sousa', () => {
-
+  it('Filtrar libros por categoría Tech | Key De Sousa', () => {
     cy.visit(url.login)
     cy.login(user.name, user.password)
     cy.url().should('include', url.home)
-    pageHome.clickCategory('Drama')
-    pageHome.clickBookByTitle('The Last Party')
-    pageHome.isBookDetailVisible('The Last Party', 'Drama')
+    pageHome.clickCategory('Tech')
+    pageHome.clickBookByTitle('Steve Jobs')
+    pageHome.isBookDetailVisible('Steve Jobs', 'Tech')
 
   })
 
-  it('Titulo caso de prueba 3 | Nombre Alumno', () => {
+  it('Iniciar sesión con credenciales inválidas | Ciro Brito', () => {
+    cy.visit(url.login)
+    pageLogin.typeUserName(user.invalidName)
+    pageLogin.typeUserPassword(user.invalidPassword)
+    pageLogin.clickLoginButton()
+    pageLogin.verifyLoginError()
   })
+ 
+  it('Búsqueda de un libro existente | Vanesa Gonzalez', () => {
+    cy.visit(url.login)
+    cy.login(user.name, user.password)
+    cy.url().should('include', url.home)
+    pageHome.searchBook('Roomies')
+    pageHome.validateBookVisible('Roomies')
+    })
 
-  it('Titulo caso de prueba 4 | Nombre Alumno', () => {
-  })
-
-  it('Titulo caso de prueba 5 | Nombre Alumno', () => {
-  })
+it('Validar que la interfaz no muestre el usuario sin iniciar sesión | Marlon Jaramillo', () => {
+  cy.clearCookies()
+  cy.clearLocalStorage()
+  cy.visit(url.login)
+  cy.get('body').should('not.contain', user.name)
+  cy.contains('Login').should('be.visible')
+})
 
   //it.only ejecutar solo ese caso de prueba
   //it.skip no ejecuta ese caso de prueba

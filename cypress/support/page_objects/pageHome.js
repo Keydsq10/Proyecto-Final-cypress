@@ -60,7 +60,18 @@ class pageHome {
         cy.contains(bookTitle).should('be.visible')
         cy.contains(categoryName).should('be.visible')
     }
-
+    searchBook(bookName) {
+        cy.get('input[placeholder="Search books or authors"]')
+            .clear()
+            .type(bookName)
+        cy.contains('mat-option', bookName)
+    }
+    validateBookVisible(bookName) {
+        cy.get('app-book-card')
+            .contains(bookName)
+            .should('be.visible')
+            .click({ force: true })
+    }
 }
 
 module.exports = new pageHome();
