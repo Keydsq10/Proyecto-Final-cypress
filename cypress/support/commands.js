@@ -22,35 +22,36 @@ Cypress.Commands.add('deleteCartAPI', (userId) => {
 
 
 Cypress.Commands.add('postCheckOutAPI', (userId, token, codeResponse) => {
-    
-cy.request({
-            method: 'POST',
-            url: `https://app.bookdbqa.online/api/CheckOut/${userId}`,
-            failOnStatusCode: false, // importante para que cypress no falle automaticamente ante un error 400 o 500
-            headers: {
-                accept: 'application/json',
-                'content-type': 'application/json',
-                authorization: token,
-            },
-            body:
-            {
-                "orderDetails": [
-                    {
-                        "book": {
-                            "bookId": 3,
-                            "title": "Harry Potter and the Prisoner of Azkaban",
-                            "author": "JKR",
-                            "category": "Romance",
-                            "price": 213,
-                            "coverFileName": "c63ade52-3f90-41fa-980a-1136b6ad2128HP3.jpg"
-                        },
-                        "quantity": 1
-                    }
-                ],
-                "cartTotal": 213
-            }
-        }).then((response) => {
-      expect(response.status).to.eq(codeResponse)})
+
+    cy.request({
+        method: 'POST',
+        url: `https://app.bookdbqa.online/api/CheckOut/${userId}`,
+        failOnStatusCode: false, // importante para que cypress no falle automaticamente ante un error 400 o 500
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            authorization: token,
+        },
+        body:
+        {
+            "orderDetails": [
+                {
+                    "book": {
+                        "bookId": 3,
+                        "title": "Harry Potter and the Prisoner of Azkaban",
+                        "author": "JKR",
+                        "category": "Romance",
+                        "price": 213,
+                        "coverFileName": "c63ade52-3f90-41fa-980a-1136b6ad2128HP3.jpg"
+                    },
+                    "quantity": 1
+                }
+            ],
+            "cartTotal": 213
+        }
+    }).then((response) => {
+        expect(response.status).to.eq(codeResponse)
+    })
 
 })
 
@@ -76,7 +77,7 @@ Cypress.Commands.add('postLoginAPI', (username, password, codeResponse) => {
     cy.request({
         method: 'POST',
         url: `https://app.bookdbqa.online/api/Login`,
-        failOnStatusCode: false, 
+        failOnStatusCode: false,
         headers: {
             accept: 'application/json',
             'content-type': 'application/json'
@@ -149,11 +150,54 @@ Cypress.Commands.add('postCheckOutWithoutBodyAPI', (userId, token, codeResponse)
             accept: 'application/json',
             'content-type': 'application/json',
             authorization: token,
+        },
+        body: {
+            orderDetails: "dato_invalido",
+            cartTotal: "dato_invalido"
         }
-
     }).then((response) => {
         expect(response.status).to.eq(codeResponse)
     })
 
-    
+//Marlon
+Cypress.Commands.add('loginAPI', (username, password) => {
+  return cy.request({
+    method: 'POST',
+    url: 'https://app.bookdbqa.online/api/Login',
+    failOnStatusCode: false,
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json'
+    },
+    body: {
+      username: username,
+      password: password
+    }
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+    return response.body.token
+  })
+})
+
+Cypress.Commands.add('getBillingDetailsAPI', (userId, token, expectedStatus) => {
+
+  const headers = {
+    accept: 'application/json',
+    'content-type': 'application/json'
+  }
+
+  if (token) {
+    headers.authorization = token
+  }
+
+  cy.request({
+    method: 'GET',
+    url: `https://app.bookdbqa.online/api/Billing/${userId}`,
+    failOnStatusCode: false,
+    headers: headers
+  }).then((response) => {
+    expect(response.status).to.eq(expectedStatus)
+  })
+
+})
 })
